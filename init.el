@@ -210,13 +210,11 @@
  '(make-backup-files nil)
  '(menu-bar-mode nil)
  '(package-archives
-   (quote
-    (("org" . "https://orgmode.org/elpa/")
+   '(("org" . "https://orgmode.org/elpa/")
      ("melpa" . "https://melpa.org/packages/")
-     ("gnu" . "https://elpa.gnu.org/packages/"))))
+     ("gnu" . "https://elpa.gnu.org/packages/")))
  '(package-selected-packages
-   (quote
-    (company-c-headers bind-key company lsp-ui lsp-mode flycheck monokai-theme transient-dwim leaf-convert leaf-tree blackout el-get hydra leaf-keywords leaf)))
+   '(company-c-headers bind-key company lsp-ui lsp-mode flycheck monokai-theme transient-dwim leaf-convert leaf-tree blackout el-get hydra leaf-keywords leaf))
  '(scroll-bar-mode nil)
  '(scroll-conservatively 1)
  '(scroll-margin 10)
