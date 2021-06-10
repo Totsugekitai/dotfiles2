@@ -51,6 +51,7 @@
            (global-display-line-numbers-mode . t) ;; 行番号を表示
            (electric-indent-mode . t) ;; 改行時インデント
            (make-backup-files . nil) ;; backupファイルを作成しない
+           (custom-file . "~/.emacs.d/custom.el") ;; customファイルをcustom.elに書くようにする
            )
   :setq ((show-paren-style quote mixed))
   :config
@@ -193,44 +194,3 @@
   :setq((rustic-format-on-save . nil)
         (rustic-lsp-format . t)))
 
-
-
-;; -----
-;; auto configuration
-;; -----
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(electric-indent-mode t)
- '(electric-pair-mode t)
- '(global-display-line-numbers-mode t)
- '(indent-tabs-mode nil)
- '(make-backup-files nil)
- '(menu-bar-mode nil)
- '(package-archives
-   (quote
-    (("org" . "https://orgmode.org/elpa/")
-     ("melpa" . "https://melpa.org/packages/")
-     ("gnu" . "https://elpa.gnu.org/packages/"))))
- '(package-selected-packages
-   (quote
-    (company-c-headers bind-key company lsp-ui lsp-mode flycheck monokai-theme transient-dwim leaf-convert leaf-tree blackout el-get hydra leaf-keywords leaf)))
- '(scroll-bar-mode nil)
- '(scroll-conservatively 1)
- '(scroll-margin 10)
- '(show-paren-mode t)
- '(show-trailing-whitespace t)
- '(tool-bar-mode nil)
- '(transient-mark-mode t)
- '(truncate-lines nil)
- '(user-full-name "Hirose Tomoyuki")
- '(user-login-name "totsugekitai" t)
- '(user-mail-address "hrstmyk811m@gmail.com"))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
