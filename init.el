@@ -130,7 +130,8 @@
          (lsp-prefer-capf . t)
          (gc-cons-threshold . 12800000))
   :custom (lsp-rust-server . 'rls)
-  )
+  :bind (("M-." . xref-find-definitions)
+         ("M-," . xref-find-references)))
 
 (leaf lsp-ui
   :doc "UI modules for lsp-mode"
@@ -187,7 +188,7 @@
   (c-mode-hook . ((c-set-style "linux")
                   (setq c-basic-offset 4)))
   (c++-mode-hook . ((c-set-style "linux")
-                    (setq c-basic-offset 4))))
+                    (setq c-basic-offset 2))))
 
 ;; GNU Global
 (leaf ggtags
