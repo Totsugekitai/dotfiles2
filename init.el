@@ -34,7 +34,7 @@
   :doc "define customization properties of builtins"
   :tag "builtin" "internal"
   :custom ((user-full-name . "Hirose Tomoyuki")
-	   (user-mail-address . "hrstmyk811m@gmail.com")
+	   (user-mail-address . "37617413+Totsugekitai@users.noreply.github.com")
 	   (user-login-name . "totsugekitai")
 	   (truncate-lines . nil) ;; はみ出た文字を切り詰めない
 	   (menu-bar-mode . nil) ;; メニューバーを出さない
@@ -51,6 +51,7 @@
            (global-display-line-numbers-mode . t) ;; 行番号を表示
            (electric-indent-mode . t) ;; 改行時インデント
            (make-backup-files . nil) ;; backupファイルを作成しない
+           (custom-file . "~/.emacs.d/custom.el") ;; customファイルをcustom.elに書くようにする
            )
   :setq ((show-paren-style quote mixed))
   :config
@@ -117,13 +118,19 @@
   :emacs>= 26.1
   :ensure t
   :commands lsp
-  :hook ((c-mode-hook c++-mode-hook rustic-mode-hook) . lsp)
+  :hook ((c-mode-hook c++-mode-hook rust-mode-hook) . lsp)
   :config
-  (add-to-list 'exec-path (expand-file-name "~/.local/bin/"))
+  (setq exec-path (cons
+                   (expand-file-name "~/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin")
+                   exec-path))
+  (setq exec-path (cons
+                   (expand-file-name "~/.cargo/bin")
+                   exec-path))
   :setq ((lsp-prefer-flymake . nil)
          (lsp-prefer-capf . t)
-         (gc-cons-threshold . 12800000)
-         (rustic-lsp-server . 'rust-analyzer)))
+         (gc-cons-threshold . 12800000))
+  :custom (lsp-rust-server . 'rls)
+  )
 
 (leaf lsp-ui
   :doc "UI modules for lsp-mode"
@@ -182,53 +189,21 @@
   (c++-mode-hook . ((c-set-style "linux")
                     (setq c-basic-offset 4))))
 
-(leaf rustic
-  :doc "Rust development environment"
-  :req "emacs-26.1" "xterm-color-1.6" "dash-2.13.0" "s-1.10.0" "f-0.18.2" "markdown-mode-2.3" "spinner-1.7.3" "let-alist-1.0.4" "seq-2.3" "ht-2.0"
-  :tag "languages" "emacs>=26.1"
-  :added "2021-03-21"
-  :emacs>= 26.1
+(leaf rust-mode
+  :doc "A major-mode for editing Rust source code"
+  :req "emacs-25.1"
+  :tag "languages" "emacs>=25.1"
+  :added "2021-06-30"
+  :url "https://github.com/rust-lang/rust-mode"
+  :emacs>= 25.1
   :ensure t
-  :hook (rustic-mode . cargo-minor-mode)
-  :setq((rustic-format-on-save . nil)
-        (rustic-lsp-format . t)))
+  :custom (rust-format-on-save . t))
 
-
-
-;; -----
-;; auto configuration
-;; -----
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(electric-indent-mode t)
- '(electric-pair-mode t)
- '(global-display-line-numbers-mode t)
- '(indent-tabs-mode nil)
- '(make-backup-files nil)
- '(menu-bar-mode nil)
- '(package-archives
-   '(("org" . "https://orgmode.org/elpa/")
-     ("melpa" . "https://melpa.org/packages/")
-     ("gnu" . "https://elpa.gnu.org/packages/")))
- '(package-selected-packages
-   '(company-c-headers bind-key company lsp-ui lsp-mode flycheck monokai-theme transient-dwim leaf-convert leaf-tree blackout el-get hydra leaf-keywords leaf))
- '(scroll-bar-mode nil)
- '(scroll-conservatively 1)
- '(scroll-margin 10)
- '(show-paren-mode t)
- '(show-trailing-whitespace t)
- '(tool-bar-mode nil)
- '(transient-mark-mode t)
- '(truncate-lines nil)
- '(user-full-name "Hirose Tomoyuki")
- '(user-login-name "totsugekitai" t)
- '(user-mail-address "hrstmyk811m@gmail.com"))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(leaf cargo
+  :doc "Emacs Minor Mode for Cargo, Rust's Package Manager."
+  :req "emacs-24.3" "rust-mode-0.2.0" "markdown-mode-2.4"
+  :tag "tools" "emacs>=24.3"
+  :added "2021-06-30"
+  :emacs>= 24.3
+  :ensure t
+  :hook (rust-mode . cargo-minor-mode))
