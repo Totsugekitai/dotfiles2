@@ -189,6 +189,15 @@
   (c++-mode-hook . ((c-set-style "linux")
                     (setq c-basic-offset 4))))
 
+;; GNU Global
+(leaf ggtags
+  :ensure t
+  :config
+  (add-hook 'c-mode-common-hook
+            (lambda nil
+              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+                (ggtags-mode 1)))))
+
 (leaf rust-mode
   :doc "A major-mode for editing Rust source code"
   :req "emacs-25.1"
