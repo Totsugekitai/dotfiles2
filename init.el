@@ -34,7 +34,7 @@
   :doc "define customization properties of builtins"
   :tag "builtin" "internal"
   :custom ((user-full-name . "Hirose Tomoyuki")
-	   (user-mail-address . "hrstmyk811m@gmail.com")
+	   (user-mail-address . "37617413+Totsugekitai@users.noreply.github.com")
 	   (user-login-name . "totsugekitai")
 	   (truncate-lines . nil) ;; はみ出た文字を切り詰めない
 	   (menu-bar-mode . nil) ;; メニューバーを出さない
@@ -118,13 +118,20 @@
   :emacs>= 26.1
   :ensure t
   :commands lsp
-  :hook ((c-mode-hook c++-mode-hook rustic-mode-hook) . lsp)
+  :hook ((c-mode-hook c++-mode-hook rust-mode-hook) . lsp)
   :config
-  (add-to-list 'exec-path (expand-file-name "~/.local/bin/"))
+  (setq exec-path (cons
+                   (expand-file-name "~/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin")
+                   exec-path))
+  (setq exec-path (cons
+                   (expand-file-name "~/.cargo/bin")
+                   exec-path))
   :setq ((lsp-prefer-flymake . nil)
          (lsp-prefer-capf . t)
-         (gc-cons-threshold . 12800000)
-         (rustic-lsp-server . 'rust-analyzer)))
+         (gc-cons-threshold . 12800000))
+  :custom (lsp-rust-server . 'rls)
+  :bind (("M-." . xref-find-definitions)
+         ("M-," . xref-find-references)))
 
 (leaf lsp-ui
   :doc "UI modules for lsp-mode"
@@ -181,16 +188,32 @@
   (c-mode-hook . ((c-set-style "linux")
                   (setq c-basic-offset 4)))
   (c++-mode-hook . ((c-set-style "linux")
-                    (setq c-basic-offset 4))))
+                    (setq c-basic-offset 2))))
 
-(leaf rustic
-  :doc "Rust development environment"
-  :req "emacs-26.1" "xterm-color-1.6" "dash-2.13.0" "s-1.10.0" "f-0.18.2" "markdown-mode-2.3" "spinner-1.7.3" "let-alist-1.0.4" "seq-2.3" "ht-2.0"
-  :tag "languages" "emacs>=26.1"
-  :added "2021-03-21"
-  :emacs>= 26.1
+;; GNU Global
+(leaf ggtags
   :ensure t
-  :hook (rustic-mode . cargo-minor-mode)
-  :setq((rustic-format-on-save . nil)
-        (rustic-lsp-format . t)))
+  :config
+  (add-hook 'c-mode-common-hook
+            (lambda nil
+              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+                (ggtags-mode 1)))))
 
+(leaf rust-mode
+  :doc "A major-mode for editing Rust source code"
+  :req "emacs-25.1"
+  :tag "languages" "emacs>=25.1"
+  :added "2021-06-30"
+  :url "https://github.com/rust-lang/rust-mode"
+  :emacs>= 25.1
+  :ensure t
+  :custom (rust-format-on-save . t))
+
+(leaf cargo
+  :doc "Emacs Minor Mode for Cargo, Rust's Package Manager."
+  :req "emacs-24.3" "rust-mode-0.2.0" "markdown-mode-2.4"
+  :tag "tools" "emacs>=24.3"
+  :added "2021-06-30"
+  :emacs>= 24.3
+  :ensure t
+  :hook (rust-mode . cargo-minor-mode))
