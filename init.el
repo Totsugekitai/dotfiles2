@@ -118,13 +118,16 @@
   :emacs>= 26.1
   :ensure t
   :commands lsp
-  :hook ((c-mode-hook c++-mode-hook rust-mode-hook) . lsp)
+  :hook ((c-mode-hook c++-mode-hook python-mode-hook rust-mode-hook) . lsp)
   :config
   (setq exec-path (cons
                    (expand-file-name "~/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin")
                    exec-path))
   (setq exec-path (cons
                    (expand-file-name "~/.cargo/bin")
+                   exec-path))
+  (setq exec-path (cons
+                   (expand-file-name "~/.local/nodejs/bin")
                    exec-path))
   :setq ((lsp-prefer-flymake . nil)
          (lsp-prefer-capf . t)
@@ -189,6 +192,10 @@
                   (setq c-basic-offset 4)))
   (c++-mode-hook . ((c-set-style "linux")
                     (setq c-basic-offset 2))))
+
+;; Python
+(leaf lsp-pyright
+  :ensure t)
 
 ;; GNU Global
 (leaf ggtags
