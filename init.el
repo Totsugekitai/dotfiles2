@@ -1,3 +1,5 @@
+;;; init.el --- Emacs init code
+;;; Commentary:
 ;; <leaf-install-code>
 (eval-and-compile
   (customize-set-variable
@@ -42,7 +44,7 @@
 	   (scroll-bar-mode . nil) ;; スクロールバーを出さない
 	   (indent-tabs-mode . nil) ;; インデントは常にスペース
            (show-trailing-whitespace . t) ;; 行末スペースをハイライト
-           ;;(global-hl-line-mode . t) ;; 現在行をハイライト
+           (global-hl-line-mode . t) ;; 現在行をハイライト
            (transient-mark-mode . t) ;; 選択範囲をハイライト
            (show-paren-mode . t) ;; カッコのハイライト
            (scroll-conservatively . 1) ;; スクロールを1行ごとに
@@ -53,12 +55,12 @@
            (make-backup-files . nil) ;; backupファイルを作成しない
            (custom-file . "~/.emacs.d/custom.el") ;; customファイルをcustom.elに書くようにする
            )
+  :defvar (show-paren-style)
   :setq ((show-paren-style quote mixed))
   :config
   ;; 横の行番号の色
   (set-face-attribute 'line-number nil
-                      :foreground "DarkOliveGreen"
-                      :background "dark")
+                      :background "color-233")
   ;; 横の行番号の色
   (set-face-attribute 'line-number-current-line nil
                       :foreground "gold")
@@ -71,6 +73,7 @@
 (leaf autorevert
   :doc "revert buffers when files on disk change"
   :tag "builtin"
+  :ensure t
   :custom ((auto-revert-interval . 0.1))
   :global-minor-mode global-auto-revert-mode)
 
@@ -78,6 +81,7 @@
   :doc "delete selection if you insert"
   :tag "builtin"
   :added "2021-03-21"
+  :ensure t
   :global-minor-mode delete-selection-mode)
 
 (leaf magit
@@ -118,7 +122,7 @@
   :emacs>= 26.1
   :ensure t
   :commands lsp
-  :hook ((c-mode-hook c++-mode-hook rust-mode-hook) . lsp)
+  ;;:hook ((c-mode-hook c++-mode-hook rust-mode-hook) . lsp)
   :config
   (setq exec-path (cons
                    (expand-file-name "~/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin")
@@ -178,12 +182,22 @@
   :config
   (add-to-list 'company-backends 'company-capf))
 
+;; yasnippet
+(leaf yasnippet
+  :ensure t
+  :global-minor-mode yas-global-mode)
+
+;; monokai
+(leaf monokai-theme :ensure t)
+
+;; C/C++
 (leaf cc-mode
   :doc "major mode for editing C and similar languages"
   :tag "builtin"
   :added "2021-03-21"
   :defvar (c-basic-offset)
   :bind (c-mode-base-map ("C-c c" . compile))
+  :hook ((c-mode-hook c++-mode-hook) . lsp)
   :mode-hook
   (c-mode-hook . ((c-set-style "linux")
                   (setq c-basic-offset 4)))
@@ -199,6 +213,7 @@
               (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
                 (ggtags-mode 1)))))
 
+;; Rust
 (leaf rust-mode
   :doc "A major-mode for editing Rust source code"
   :req "emacs-25.1"
@@ -207,8 +222,9 @@
   :url "https://github.com/rust-lang/rust-mode"
   :emacs>= 25.1
   :ensure t
+  :hook (rust-mode-hook . lsp)
   :custom (rust-format-on-save . t))
-
+;; Rust Cargo
 (leaf cargo
   :doc "Emacs Minor Mode for Cargo, Rust's Package Manager."
   :req "emacs-24.3" "rust-mode-0.2.0" "markdown-mode-2.4"
@@ -217,3 +233,12 @@
   :emacs>= 24.3
   :ensure t
   :hook (rust-mode . cargo-minor-mode))
+
+;; Haskell
+(leaf lsp-haskell
+  :ensure t
+  :hook ((haskell-mode-hook haskell-literture-mode-hook) . lsp))
+
+(provide 'init)
+
+;;; init.el ends here
