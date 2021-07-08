@@ -122,7 +122,7 @@
   :emacs>= 26.1
   :ensure t
   :commands lsp
-  ;;:hook ((c-mode-hook c++-mode-hook rust-mode-hook) . lsp)
+  :defvar (lsp-prefer-flymake lsp-completion-provider)
   :config
   (setq exec-path (cons
                    (expand-file-name "~/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin")
@@ -130,8 +130,11 @@
   (setq exec-path (cons
                    (expand-file-name "~/.cargo/bin")
                    exec-path))
+  (setq exec-path (cons
+                   (expand-file-name "~/.local/nodejs/bin")
+                   exec-path))
   :setq ((lsp-prefer-flymake . nil)
-         (lsp-prefer-capf . t)
+         (lsp-completion-provider . :capf)
          (gc-cons-threshold . 12800000))
   :custom (lsp-rust-server . 'rls)
   :bind (("M-." . xref-find-definitions)
@@ -204,14 +207,17 @@
   (c++-mode-hook . ((c-set-style "linux")
                     (setq c-basic-offset 2))))
 
+;; Python
+(leaf lsp-pyright :ensure t)
+
 ;; GNU Global
 (leaf ggtags
   :ensure t
   :config
-  (add-hook 'c-mode-common-hook
-            (lambda nil
-              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-                (ggtags-mode 1)))))
+  :hook (c-mode-common-hook
+         (lambda nil
+           (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+             (ggtags-mode 1)))))
 
 ;; Rust
 (leaf rust-mode
@@ -224,6 +230,7 @@
   :ensure t
   :hook (rust-mode-hook . lsp)
   :custom (rust-format-on-save . t))
+
 ;; Rust Cargo
 (leaf cargo
   :doc "Emacs Minor Mode for Cargo, Rust's Package Manager."
@@ -238,6 +245,8 @@
 (leaf lsp-haskell
   :ensure t
   :hook ((haskell-mode-hook haskell-literture-mode-hook) . lsp))
+
+;;; init.el end section
 
 (provide 'init)
 
