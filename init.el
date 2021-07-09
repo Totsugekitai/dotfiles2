@@ -57,6 +57,8 @@
            )
   :defvar (show-paren-style)
   :setq ((show-paren-style quote mixed))
+  :bind (("M-c" . nil)
+         ("M-c" . compile))
   :config
   ;; 横の行番号の色
   (set-face-attribute 'line-number nil
@@ -67,8 +69,7 @@
   (set-language-environment 'Japanese) ;; 日本語環境
   (set-language-environment 'utf-8) ;; UTF-8
   (prefer-coding-system 'utf-8) ;; UTF-8
-  (load-theme 'monokai t) ;; monokaiテーマ
-  )
+  (load-theme 'monokai t)) ;; monokaiテーマ
 
 (leaf autorevert
   :doc "revert buffers when files on disk change"
@@ -245,6 +246,10 @@
 (leaf lsp-haskell
   :ensure t
   :hook ((haskell-mode-hook haskell-literture-mode-hook) . lsp))
+
+;; LaTeX
+(leaf tex
+  :hook (LaTeX-mode-hook . (visual-line-mode LaTeX-math-mode turn-on-reftex)))
 
 ;;; init.el end section
 
