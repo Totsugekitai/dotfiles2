@@ -60,15 +60,11 @@
   :bind (("M-c" . nil)
          ("M-c" . compile))
   :config
-  ;; 横の行番号の色
-  (set-face-attribute 'line-number nil
-                      :background "color-233")
-  ;; 横の行番号の色
-  (set-face-attribute 'line-number-current-line nil
-                      :foreground "gold")
+  (set-face-attribute 'line-number nil :background "color-233") ;; 横の行番号の色
+  (set-face-attribute 'line-number-current-line nil :foreground "gold") ;; 横の行番号の色
   (set-language-environment 'Japanese) ;; 日本語環境
-  (set-language-environment 'utf-8) ;; UTF-8
-  (prefer-coding-system 'utf-8) ;; UTF-8
+  (set-language-environment 'utf-8)    ;; UTF-8
+  (prefer-coding-system 'utf-8)        ;; UTF-8
   (load-theme 'monokai t)) ;; monokaiテーマ
 
 (leaf autorevert
@@ -125,15 +121,12 @@
   :commands lsp
   :defvar (lsp-prefer-flymake lsp-completion-provider)
   :config
-  (setq exec-path (cons
-                   (expand-file-name "~/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin")
-                   exec-path))
-  (setq exec-path (cons
-                   (expand-file-name "~/.cargo/bin")
-                   exec-path))
-  (setq exec-path (cons
-                   (expand-file-name "~/.local/nodejs/bin")
-                   exec-path))
+  (let* (dir-list
+         (expand-file-name "~/.local/nodejs/bin")
+         (expand-file-name "~/.cargo/bin")
+         (expand-file-name "~/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin"))
+    (dolist (dir dir-list exec-path)
+      (setq exec-path (cons dir exec-path))))
   :setq ((lsp-prefer-flymake . nil)
          (lsp-completion-provider . :capf)
          (gc-cons-threshold . 12800000))
@@ -215,10 +208,9 @@
 (leaf ggtags
   :ensure t
   :config
-  :hook (c-mode-common-hook
-         (lambda nil
-           (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-             (ggtags-mode 1)))))
+  :hook (c-mode-common-hook (lambda nil
+                              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+                                (ggtags-mode 1)))))
 
 ;; Rust
 (leaf rust-mode
