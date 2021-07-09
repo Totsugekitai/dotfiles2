@@ -1,5 +1,6 @@
 ;;; init.el --- Emacs init code
 ;;; Commentary:
+;;; Code:
 ;; <leaf-install-code>
 (eval-and-compile
   (customize-set-variable
