@@ -122,9 +122,9 @@
   :defvar (lsp-prefer-flymake lsp-completion-provider)
   :config
   (let* (dir-list
-         (expand-file-name "~/.local/nodejs/bin")
-         (expand-file-name "~/.cargo/bin")
-         (expand-file-name "~/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin"))
+         (expand-file-name "$HOME/.local/nodejs/bin")
+         (expand-file-name "$HOME/.cargo/bin")
+         (expand-file-name "$HOME/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/bin"))
     (dolist (dir dir-list exec-path)
       (setq exec-path (cons dir exec-path))))
   :setq ((lsp-prefer-flymake . nil)
