@@ -228,12 +228,18 @@
   :added "2021-03-21"
   :defvar (c-basic-offset)
   :bind (c-mode-base-map ("C-c c" . compile))
-  :hook ((c-mode-hook c++-mode-hook) . lsp)
+  :hook
+  ((c-mode-hook c++-mode-hook) . lsp)
+  (c-mode-common-hook . (lambda nil
+                          (add-hook 'before-save-hook 'clang-format-buffer)))
   :mode-hook
   (c-mode-hook . ((c-set-style "linux")
                   (setq c-basic-offset 4)))
   (c++-mode-hook . ((c-set-style "linux")
                     (setq c-basic-offset 2))))
+
+;; clang-format
+(leaf clang-format :ensure t)
 
 ;; Python
 (leaf lsp-pyright :ensure t)
