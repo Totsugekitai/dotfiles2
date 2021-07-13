@@ -58,8 +58,7 @@
            )
   :defvar (show-paren-style)
   :setq ((show-paren-style quote mixed))
-  :bind (("M-c" . nil)
-         ("M-c" . compile))
+  :bind (("M-c" . compile))
   :config
   (set-face-attribute 'line-number nil :background "color-233") ;; 横の行番号の色
   (set-face-attribute 'line-number-current-line nil :foreground "gold") ;; 横の行番号の色
@@ -132,8 +131,10 @@
          (lsp-completion-provider . :capf)
          (gc-cons-threshold . 12800000))
   :custom (lsp-rust-server . 'rls)
-  :bind (("M-." . xref-find-definitions)
-         ("M-," . xref-find-references)))
+  :bind (:lsp-mode-map
+         ("M-." . lsp-ui-peek-find-definitions)
+         ("M-," . lsp-ui-peek-find-references))
+  )
 
 (leaf lsp-ui
   :doc "UI modules for lsp-mode"
@@ -143,8 +144,40 @@
   :url "https://github.com/emacs-lsp/lsp-ui"
   :emacs>= 26.1
   :ensure t
-  :commands lsp-ui-mode)
+  :custom ((lsp-ui-peek-enable . t)
+           (lsp-ui-peek-peek-height . 20)
+           (lsp-ui-peek-list-width . 50))
+  :commands lsp-ui-mode
+  :hook (lsp-mode-hook . lsp-ui-mode))
 
+;; ivy
+(leaf ivy
+  :ensure t
+  :blackout t
+  :leaf-defer nil
+  :custom ((ivy-initial-inputs-alist . nil)
+           (ivy-use-selectable-prompt . t))
+  :global-minor-mode t
+  :config
+  (leaf swiper
+    :ensure t
+    :bind (("C-s" . swiper)))
+  (leaf recentf
+    :defvar (recentf-save-file recentf-max-saved-items recentf-exclude recentf-auto-cleanup)
+    :setq ((recentf-save-file . "~/.emacs.d/.recentf")
+           (recentf-max-saved-items . 200)
+           (recentf-exclude . '(".recentf"))
+           (recentf-auto-cleanup . 'never))
+    :config (leaf recentf-ext :ensure t))
+  (leaf counsel
+    :after recentf
+    :ensure t
+    :blackout t
+    :bind (("C-x C-r" . counsel-recentf))
+    :custom `((counsel-find-file-ignore-regexp . ,(rx-to-string '(or "./" "../") 'no-group)))
+    :global-minor-mode t))
+
+;; company
 (leaf company
   :doc "Modular text completion framework"
   :req "emacs-24.3"
@@ -195,12 +228,18 @@
   :added "2021-03-21"
   :defvar (c-basic-offset)
   :bind (c-mode-base-map ("C-c c" . compile))
-  :hook ((c-mode-hook c++-mode-hook) . lsp)
+  :hook
+  ((c-mode-hook c++-mode-hook) . lsp)
+  (c-mode-common-hook . (lambda nil
+                          (add-hook 'before-save-hook 'clang-format-buffer)))
   :mode-hook
   (c-mode-hook . ((c-set-style "linux")
                   (setq c-basic-offset 4)))
   (c++-mode-hook . ((c-set-style "linux")
                     (setq c-basic-offset 2))))
+
+;; clang-format
+(leaf clang-format :ensure t)
 
 ;; Python
 (leaf lsp-pyright :ensure t)
