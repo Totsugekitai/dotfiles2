@@ -58,7 +58,7 @@
            )
   :defvar (show-paren-style)
   :setq ((show-paren-style quote mixed))
-  :bind (("M-c" . compile))
+  :bind (("C-c c" . compile))
   :config
   (set-face-attribute 'line-number nil :background "color-233") ;; 横の行番号の色
   (set-face-attribute 'line-number-current-line nil :foreground "gold") ;; 横の行番号の色
