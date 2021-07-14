@@ -122,7 +122,7 @@ export XMODIFIERS=@im=fcitx
 PATH=$HOME/.local/bin:$PATH
 
 # ghcup-env
-[ -f "/home/totsugekitai/.ghcup/env" ] && source "/home/totsugekitai/.ghcup/env"
+[ -f "$HOME/.ghcup/env" ] && source "$HOME/.ghcup/env"
 
 # rbenv
 PATH=$HOME/.rbenv/bin:$PATH
@@ -135,4 +135,4 @@ PATH=/usr/local/texlive/2020/bin/x86_64-linux:$PATH
 PATH=$HOME/.cargo/bin:$PATH
 
 # opam configuration
-test -r /home/totsugekitai/.opam/opam-init/init.sh && . /home/totsugekitai/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
+test -r $HOME/.opam/opam-init/init.sh && . $HOME/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
