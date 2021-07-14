@@ -32,6 +32,25 @@
       :ensure t
       :bind (("M-=" . transient-dwim-dispatch)))
 
+
+;; コンパイル時のウィンドウサイズを10にする
+(defun ct/create-proper-compilation-window ()
+  "Setup the *compilation* window with custom settings."
+  (when (not (get-buffer-window "*compilation*"))
+    (save-selected-window
+      (save-excursion
+        (let* ((w (split-window-vertically))
+               (h (window-height w)))
+          (select-window w)
+          (switch-to-buffer "*compilation*")
+
+          ;; Reduce window height
+          (shrink-window (- h 10))
+
+          ;; Prevent other buffers from displaying inside
+          (set-window-dedicated-p w t)
+          )))))
+
 ;; You can also configure builtin package via leaf!
 (leaf cus-start
   :doc "define customization properties of builtins"
@@ -59,6 +78,7 @@
   :defvar (show-paren-style)
   :setq ((show-paren-style quote mixed))
   :bind (("C-c c" . compile))
+  :hook (compilation-mode-hook . ct/create-proper-compilation-window) ;; コンパイル時ウィンドウサイズ
   :config
   (set-face-attribute 'line-number nil :background "color-233") ;; 横の行番号の色
   (set-face-attribute 'line-number-current-line nil :foreground "gold") ;; 横の行番号の色
