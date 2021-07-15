@@ -31,3 +31,4 @@ link clang-format $HOME/.clang-format
 link init.el $HOME/.emacs.d/init.el
 link tmux.conf $HOME/.tmux.conf
 link bashrc $HOME/.bashrc
+link bash_profile $HOME/.bash_profile
