@@ -251,7 +251,7 @@
   :hook
   ((c-mode-hook c++-mode-hook) . lsp)
   (c-mode-common-hook . (lambda nil
-                          (add-hook 'before-save-hook 'clang-format-buffer)))
+                          (add-hook (make-local-variable 'before-save-hook) 'clang-format-buffer)))
   :mode-hook
   (c-mode-hook . ((c-set-style "linux")
                   (setq c-basic-offset 4)))
