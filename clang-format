@@ -3,3 +3,5 @@ BasedOnStyle:  Google
 Language:      Cpp
 Standard:      c++17
 UseTab:        Never
+AccessModifierOffset:   -2
+AlignConsecutiveAssignments:    true

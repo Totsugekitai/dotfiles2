@@ -292,7 +292,8 @@
   :added "2021-06-30"
   :emacs>= 24.3
   :ensure t
-  :hook (rust-mode . cargo-minor-mode))
+  :hook (rust-mode . cargo-minor-mode)
+  :bind* ("C-c c" . cargo-process-build))
 
 ;; Haskell
 (leaf lsp-haskell
