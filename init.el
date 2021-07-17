@@ -267,7 +267,6 @@
 ;; GNU Global
 (leaf ggtags
   :ensure t
-  :config
   :hook (c-mode-common-hook (lambda nil
                               (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
                                 (ggtags-mode 1)))))
@@ -292,8 +291,7 @@
   :added "2021-06-30"
   :emacs>= 24.3
   :ensure t
-  :hook (rust-mode . cargo-minor-mode)
-  :bind* ("C-c c" . cargo-process-build))
+  :hook (rust-mode . cargo-minor-mode))
 
 ;; Haskell
 (leaf lsp-haskell
