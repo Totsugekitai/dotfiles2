@@ -302,6 +302,16 @@
 (leaf tex
   :hook (LaTeX-mode-hook . (visual-line-mode LaTeX-math-mode turn-on-reftex)))
 
+;; orgmode
+(defun insert-current-date (&optional diff)
+  "現在年月日をカレントバッファに出力します.引数 DIFF を与えると DIFF 日前を出力します."
+  (interactive "P")
+  (insert
+   (shell-command-to-string
+    "echo -n $(date +'%Y/%m/%d(%a)')")))
+(leaf org-mode
+  :bind ("C-c d" . insert-current-date))
+
 ;;; init.el end section
 
 (provide 'init)
