@@ -33,3 +33,5 @@ link tmux.conf $HOME/.tmux.conf
 link bashrc $HOME/.bashrc
 link bash_profile $HOME/.bash_profile
 link i3wm.conf $HOME/.config/i3/config
+link polybar.conf $HOME/.config/polybar/config
+link polybar_launch.sh $HOME/.config/polybar/polybar_launch.sh
