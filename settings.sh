@@ -32,3 +32,4 @@ link init.el $HOME/.emacs.d/init.el
 link tmux.conf $HOME/.tmux.conf
 link bashrc $HOME/.bashrc
 link bash_profile $HOME/.bash_profile
+link i3wm.conf $HOME/.config/i3/config
